@@ -1,21 +1,28 @@
 #include "DHT.h"
 
+//Se especifica la entrada digital a la placa Arduino desde el sensor DHT22.
 #define DHTPIN 2
 #define DHTTYPE DHT22
 
 DHT dht(DHTPIN, DHTTYPE);
 
+// Se le asignan las entradas desde el sensor de partículas de polvo, para la entrada analógica
+// se cambia el entero "measurePin". Para la entrada digital se cambia la variable "ledPower".
 int measurePin = 5;
 int ledPower = 3;
  
 int samplingTime = 280;
 int deltaTime = 40;
 int sleepTime = 9680;
- 
+
+// Se inicializa la variable "voMeasured" que toma valores entre 0-1023 y que corresponde a la señal analógica,
+// la variable "calcVoltage" es la traducción de la señal analógica al nivel de voltaje. "dustDensity" es el
+// significado de este voltaje en concentración de partículas en mg/m3. 
 float voMeasured = 0;
 float calcVoltage = 0;
 float dustDensity = 0;
 
+// "Vr" es el nivel de voltaje de salida del circuito con termistor. Se traduce en temperatura "T1"
 float Vr = 0.0;
 float T1 = 0.0;
  
@@ -41,7 +48,7 @@ void loop(){
  
   // 0 - 3.3V mapped to 0 - 1023 integer values
   // recover voltage
-  calcVoltage = voMeasured * (5.0 / 1024);
+  calcVoltage = voMeasured * (5.0 / 1023);
  
   // linear eqaution taken from http://www.howmuchsnow.com/arduino/airquality/
   // Chris Nafis (c) 2012
