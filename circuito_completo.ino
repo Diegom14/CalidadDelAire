@@ -1,12 +1,12 @@
 #include "DHT.h"
-#include <Ethernet.h>
-#include <SPI.h>
+//#include <Ethernet.h>
+//#include <SPI.h>
 
 // Configuracion del Ethernet Shield
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFF, 0xEE}; // Direccion MAC
-byte ip[] = { 192,168,xx,xx }; // Direccion IP del Arduino
-byte server[] = { 127,0,0,1 }; // Direccion IP del servidor
-EthernetClient client; 
+//byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFF, 0xEE}; // Direccion MAC
+//byte ip[] = { 192,168,xx,xx }; // Direccion IP del Arduino
+//byte server[] = { 127,0,0,1 }; // Direccion IP del servidor
+//EthernetClient client; 
 float temperatura;
 int analog_pin = 0;
 
@@ -27,9 +27,9 @@ int sleepTime = 9680;
 float calcVoltage = 0;
 float dustDensity = 0;
 
-// "Vr" es el nivel de voltaje de salida del circuito con termistor. Se traduce en temperatura "T1"
-float Vr = 0.0;
-float T1 = 0.0;
+// "voltajeSalida" es el nivel de voltaje de salida del circuito con termistor. Se traduce en temperatura "temp"
+float voltajeSalida = 0.0;
+float temp = 0.0;
  
 void setup(){
   Serial.begin(9600);
@@ -60,9 +60,9 @@ void loop(){
   dustDensity = 0.17 * calcVoltage - 0.1;
 
   //Se obtiene la salida de tensión, al hacer la siguiente relación.
-  VoltajeSalida = 5.0 * analogRead(A0) / 1023;
+  voltajeSalida = 5.0 * analogRead(A0) / 1023;
   //Para la configuracion con circuito.
-  temp = (4.5355 - VoltajeSalida) / 0.048;
+  temp = (4.5355 - voltajeSalida) / 0.048;
  
   Serial.print(" - Densidad de Polvo: ");
   Serial.print(dustDensity);
@@ -81,30 +81,30 @@ void loop(){
   Serial.println(" °C ");
  
   // Proceso de envio de muestras al servidor
-  if (client.connect("192.168.1.75", 80)) {
-   Serial.print("Connected to MySQL server. Sending data...");
+  //if (client.connect("192.168.1.75", 80)) {
+  // Serial.print("Connected to MySQL server. Sending data...");
 
-   client.print("POST /enviarDatos.php HTTP/1.1\n");
-   client.print("Host: 127.0.0.1\n");
-   client.print("Connection: close\n");
-   client.print("Content-Type: application/x-www-form-urlencoded\n");
-   client.print("Content-Length: ");
-   client.print(txData.length());
-   client.print("\n\n");
-   client.print(txData);
-   Serial.println("Successfull");
-  }
+  // client.print("POST /enviarDatos.php HTTP/1.1\n");
+  // client.print("Host: 127.0.0.1\n");
+  // client.print("Connection: close\n");
+  // client.print("Content-Type: application/x-www-form-urlencoded\n");
+  // client.print("Content-Length: ");
+  // client.print(txData.length());
+  // client.print("\n\n");
+  // client.print(txData);
+  // Serial.println("Successfull");
+  //}
 
-  else{
-  Serial.println("Connection failed");
-  Serial.println();
+  //else{
+  // Serial.println("Connection failed");
+  // Serial.println();
 
-  }
-  if (!client.connected()) {
-    Serial.println("Disconnected!");
-  }
-  client.stop();
-  client.flush();
+  //}
+  //if (!client.connected()) {
+  //  Serial.println("Disconnected!");
+  //}
+  //client.stop();
+  //client.flush();
  
   delay(15000);
 }
