@@ -26,6 +26,7 @@ int sleepTime = 9680;
 
 float calcVoltage = 0;
 float dustDensity = 0;
+float dustConc = 0;
 
 // "voltajeSalida" es el nivel de voltaje de salida del circuito con termistor. Se traduce en temperatura "temp"
 float voltajeSalida = 0.0;
@@ -58,6 +59,7 @@ void loop(){
   // linear eqaution taken from http://www.howmuchsnow.com/arduino/airquality/
   // Chris Nafis (c) 2012
   dustDensity = 0.17 * calcVoltage - 0.1;
+  dustConc = (calcVoltaje-0.0356)*120000;
 
   //Se obtiene la salida de tensión, al hacer la siguiente relación.
   voltajeSalida = 5.0 * analogRead(A0) / 1023;
@@ -67,6 +69,10 @@ void loop(){
   Serial.print(" - Densidad de Polvo: ");
   Serial.print(dustDensity);
   Serial.print(" mg/m3 ");
+ 
+  Serial.print(" - Concentración de Polvo: ");
+  Serial.print(dustConc);
+  Serial.print(" ppm ");
  
   Serial.print(" - Humedad: ");
   Serial.print(h);
