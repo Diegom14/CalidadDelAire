@@ -34,7 +34,7 @@ float temp = 0.0;
  
 void setup(){
   Serial.begin(9600);
-  Ethernet.begin(mac, ip); // Inicializamos el Ethernet Shield
+ // Ethernet.begin(mac, ip); // Inicializamos el Ethernet Shield
   delay(1000); // Esperamos 1 segundo de cortesia
   dht.begin();
   pinMode(3,OUTPUT);
@@ -52,14 +52,14 @@ void loop(){
   digitalWrite(3,HIGH); // turn the LED off
   delayMicroseconds(sleepTime);
  
-  // 0 - 3.3V mapped to 0 - 1023 integer values
+  // 0 - 5V mapped to 0 - 1023 integer values
   // recover voltage
   calcVoltage = analogRead(A5) * (5.0 / 1023);
  
   // linear eqaution taken from http://www.howmuchsnow.com/arduino/airquality/
   // Chris Nafis (c) 2012
   dustDensity = 0.17 * calcVoltage - 0.1;
-  dustConc = (calcVoltaje-0.0356)*120000;
+  dustConc = (calcVoltage-0.0356)*120000;
 
   //Se obtiene la salida de tensión, al hacer la siguiente relación.
   voltajeSalida = 5.0 * analogRead(A0) / 1023;
@@ -75,7 +75,7 @@ void loop(){
   Serial.print(" ppm ");
  
   Serial.print(" - Humedad: ");
-  Serial.print(h);
+  Serial.print(humedad);
   Serial.print(" % ");
 
   Serial.print(" - Temp 1: ");
@@ -112,5 +112,5 @@ void loop(){
   //client.stop();
   //client.flush();
  
-  delay(15000);
+  delay(1000);
 }
