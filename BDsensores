@@ -1,7 +1,7 @@
 
 CREATE TABLE sensores (
 		tiempo TIMESTAMP NOT NULL PRIMARY KEY,
-		temperatura double(11) NOT NULL,
-		humedad double(11) NOT NULL,
-    concentracion double(11) NOT NULL
+		temperatura double NOT NULL,
+		humedad double NOT NULL,
+    		concentracion double NOT NULL
 	);
