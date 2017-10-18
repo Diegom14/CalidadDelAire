@@ -5,7 +5,7 @@
 
 	$temp=$_POST["temp"];
 	$humedad=$_POST["humedad"];
-  $dustConc=$_POST["dustConc"];
+	$dustConc=$_POST["dustConc"];
 
 	$query = "INSERT INTO `sensores` (`temperatura`, `humedad`.`concentracion`) 
 		VALUES ('".$temp."','".$humedad."','".$dustConc."')"; 
