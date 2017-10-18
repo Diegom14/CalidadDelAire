@@ -19,7 +19,7 @@
 			<td>&nbsp;Tiempo&nbsp;</td>
 			<td>&nbsp;Temperatura 1&nbsp;</td>
 			<td>&nbsp;Humedad 1&nbsp;</td>
-      <td>&nbsp;Concentracion 1&nbsp;</td>
+    			<td>&nbsp;Concentracion 1&nbsp;</td>
 		</tr>
 
       <?php 
