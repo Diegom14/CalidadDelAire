@@ -53,7 +53,7 @@ double Temperatura() {
   
   temperatura = analogRead(termAnalog);
   temperatura = 5.0*temperatura/1023.0;
-  temperatura = (4.5355 - temperatura) / 0.048;
+  temperatura = (4.6183 - temperatura) / 0.049;
   
   return temperatura;
 }
