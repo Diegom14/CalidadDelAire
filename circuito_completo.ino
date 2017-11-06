@@ -65,16 +65,19 @@ double Humedad() {
 }
 
 double Polvo() {
-  double polvo;
+  double rawVal = 0;
+  double polvo = 0;
   
   digitalWrite(dustPIN,LOW); // power on the LED
   delayMicroseconds(samplingTime);
+  rawVal = analogRead(dustAnalog);
   delayMicroseconds(deltaTime);
   digitalWrite(dustPIN,HIGH); // turn the LED off
   delayMicroseconds(sleepTime);
-  
-  polvo = 5.0*analogRead(A5)/1023.0;
-  polvo = (polvo-0.0356)*120000;
+
+  if (rawVal>36.455)
+    polvo = (dustVal/1024)-0.0356)*120000*0.035);
+  }
   
   return polvo;
 }
