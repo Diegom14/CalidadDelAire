@@ -81,9 +81,9 @@ double Polvo() {
 
 void EnviarDatos(server,temperatura,humedad,dustConc) {
   // Proceso de envio de muestras al servidor
-  Serial.println("Connecting...");
+  Serial.println("Conectando...");
   if (client.connect(server, 80)>0) {  // Conexion con el servidor
-    client.print("GET /proyectoTics.php?temperatura="); // Enviamos los datos por GET
+    client.print("GET /proyectoTics.php?temperatura="); // Se envian los datos por GET
     client.print(temperatura);
     client.print("&humedad=");
     client.print(humedad);
@@ -97,7 +97,7 @@ void EnviarDatos(server,temperatura,humedad,dustConc) {
     Serial.println("Fallo en la conexion");
   }
   if (!client.connected()) {
-    Serial.println("Disconnected!");
+    Serial.println("Desconectado");
   }
   client.stop();
   client.flush();
