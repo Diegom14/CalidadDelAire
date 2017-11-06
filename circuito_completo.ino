@@ -9,6 +9,9 @@
 #define dustPIN 3
 #define dustAnalog 5
 #define termAnalog 0
+#define LED_p 7
+#define LED_s 8
+#define LED_t 9
 
 DHT dht(DHTPIN, DHTTYPE);
 int samplingTime = 280;
@@ -22,31 +25,6 @@ byte server[] = { 192,168,1,144 }; // Direccion IP del servidor
 EthernetClient client;
 
 //Se especifica la entrada digital a la placa Arduino desde el sensor DHT22.
-
-void setup(void) {
-  Serial.begin(9600);
-  Ethernet.begin(mac); // Inicializamos el Ethernet Shield
-  delay(1000); // Esperamos 1 segundo de cortesia
-  dht.begin();
-  pinMode(dustPIN,OUTPUT);
-}
-
-void loop(void) {
-  double temperatura = Temperatura();
-  double humedad = Humedad();
-  double dustConc = Polvo();
-  
-  Serial.print("Temperatura: ");
-  Serial.print(temperatura);
-  Serial.print("°C Humedad: ");
-  Serial.print(humedad);
-  Serial.print("% Concentracion de polvo: ");
-  Serial.print(dustConc);
-  Serial.print("ppm");
-  
-  EnviarDatos();
-  delay(10000); // Espero 10 seg antes de tomar otra muestra
-}
 
 double Temperatura() {
   double temperatura;
@@ -75,14 +53,14 @@ double Polvo() {
   digitalWrite(dustPIN,HIGH); // turn the LED off
   delayMicroseconds(sleepTime);
 
-  if (rawVal>36.455)
-    polvo = (dustVal/1024)-0.0356)*120000*0.035);
+  if (rawVal>36.455){
+    polvo = (((rawVal/1024)-0.0356)*120000*0.035);
   }
   
   return polvo;
 }
 
-void EnviarDatos(server,temperatura,humedad,dustConc) {
+void EnviarDatos(byte* server,double temperatura,double humedad, double dustConc) {
   // Proceso de envio de muestras al servidor
   Serial.println("Conectando...");
   if (client.connect(server, 80)>0) {  // Conexion con el servidor
@@ -104,4 +82,53 @@ void EnviarDatos(server,temperatura,humedad,dustConc) {
   }
   client.stop();
   client.flush();
+}
+
+void setup(void) {
+  Serial.begin(9600);
+  Ethernet.begin(mac); // Inicializamos el Ethernet Shield
+  delay(1000); // Esperamos 1 segundo de cortesia
+  dht.begin();
+  pinMode(dustPIN,OUTPUT);
+  pinMode(LED_p,OUTPUT);
+  pinMode(LED_s,OUTPUT);
+  pinMode(LED_t,OUTPUT);
+}
+
+void loop(void) {
+  double temperatura = Temperatura();
+  double humedad = Humedad();
+  double dustConc = Polvo();
+  
+  Serial.print("Temperatura: ");
+  Serial.print(temperatura);
+  Serial.print("°C Humedad: ");
+  Serial.print(humedad);
+  Serial.print("% Concentracion de polvo: ");
+  Serial.print(dustConc);
+  Serial.print("ppm");
+  
+  EnviarDatos(server,temperatura,humedad,dustConc);
+  delay(10000); // Espero 10 seg antes de tomar otra muestra
+}
+
+void LED1(double temperatura) {
+  if(temperatura > 27 && temperatura < 18)
+     digitalWrite(LED_p,HIGH);
+  else
+    digitalWrite(LED_p,LOW);
+}
+
+void LED2(double humedad) {
+  if(humedad > 60 && humedad < 40)
+     digitalWrite(LED_s,HIGH);
+  else
+    digitalWrite(LED_s,LOW);
+}
+
+void LED3(double polvo) {
+  if(polvo > 1000)
+     digitalWrite(LED_t,HIGH);
+  else
+    digitalWrite(LED_t,LOW);
 }
