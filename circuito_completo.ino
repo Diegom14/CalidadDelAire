@@ -9,9 +9,9 @@
 #define dustPIN 3
 #define dustAnalog 5
 #define termAnalog 0
-#define LED_p 7
-#define LED_s 8
-#define LED_t 9
+#define sensorPin 7
+#define serverPin 8
+#define clientPin 9
 
 DHT dht(DHTPIN, DHTTYPE);
 int samplingTime = 280;
@@ -74,11 +74,15 @@ void EnviarDatos(byte* server,double temperatura,double humedad, double dustConc
     client.println("User-Agent: Arduino 1.0");
     client.println();
     Serial.println("Conectado");
+    digitalWrite(serverPin,LOW);
+    digitalWrite(clientPin,LOW);
   } else {
     Serial.println("Fallo en la conexion");
+    digitalWrite(serverPin,HIGH);
   }
   if (!client.connected()) {
     Serial.println("Desconectado");
+    digitalWrite(clientPin,HIGH);
   }
   client.stop();
   client.flush();
@@ -90,15 +94,16 @@ void setup(void) {
   delay(1000); // Esperamos 1 segundo de cortesia
   dht.begin();
   pinMode(dustPIN,OUTPUT);
-  pinMode(LED_p,OUTPUT);
-  pinMode(LED_s,OUTPUT);
-  pinMode(LED_t,OUTPUT);
+  pinMode(sensorPin,OUTPUT);
+  pinMode(serverPin,OUTPUT);
+  pinMode(clientPin,OUTPUT);
 }
 
 void loop(void) {
   double temperatura = Temperatura();
   double humedad = Humedad();
   double dustConc = Polvo();
+  estadoSensor(temperatura,humedad,dustConc);
   
   Serial.print("Temperatura: ");
   Serial.print(temperatura);
@@ -112,23 +117,13 @@ void loop(void) {
   delay(10000); // Espero 10 seg antes de tomar otra muestra
 }
 
-void LED1(double temperatura) {
+void estadoSensor(double temperatura, double humedad, double polvo) {
   if(temperatura > 27 && temperatura < 18)
-     digitalWrite(LED_p,HIGH);
+    digitalWrite(sensorPin,HIGH);
+  else if(humedad > 60 && humedad < 40)
+    digitalWrite(sensorPin,HIGH);
+  else if(polvo > 1000)
+    digitalWrite(sensorPin,HIGH);
   else
     digitalWrite(LED_p,LOW);
-}
-
-void LED2(double humedad) {
-  if(humedad > 60 && humedad < 40)
-     digitalWrite(LED_s,HIGH);
-  else
-    digitalWrite(LED_s,LOW);
-}
-
-void LED3(double polvo) {
-  if(polvo > 1000)
-     digitalWrite(LED_t,HIGH);
-  else
-    digitalWrite(LED_t,LOW);
 }
