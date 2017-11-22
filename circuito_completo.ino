@@ -9,9 +9,7 @@
 #define dustPIN 3
 #define dustAnalog 5
 #define termAnalog 0
-#define sensorPin 7
-#define serverPin 8
-#define clientPin 9
+#define clientPin 7
 
 DHT dht(DHTPIN, DHTTYPE);
 int samplingTime = 280;
@@ -56,6 +54,8 @@ double Polvo() {
   if (rawVal>36.455){
     polvo = (((rawVal/1024)-0.0356)*120000*0.035);
   }
+  else
+    polvo = 450;
   
   return polvo;
 }
@@ -74,15 +74,13 @@ void EnviarDatos(byte* server,double temperatura,double humedad, double dustConc
     client.println("User-Agent: Arduino 1.0");
     client.println();
     Serial.println("Conectado");
-    digitalWrite(serverPin,LOW);
     digitalWrite(clientPin,LOW);
   } else {
     Serial.println("Fallo en la conexion");
-    digitalWrite(serverPin,HIGH);
+    digitalWrite(clientPin,HIGH);
   }
   if (!client.connected()) {
     Serial.println("Desconectado");
-    digitalWrite(clientPin,HIGH);
   }
   client.stop();
   client.flush();
@@ -94,8 +92,6 @@ void setup(void) {
   delay(1000); // Esperamos 1 segundo de cortesia
   dht.begin();
   pinMode(dustPIN,OUTPUT);
-  pinMode(sensorPin,OUTPUT);
-  pinMode(serverPin,OUTPUT);
   pinMode(clientPin,OUTPUT);
 }
 
@@ -103,7 +99,6 @@ void loop(void) {
   double temperatura = Temperatura();
   double humedad = Humedad();
   double dustConc = Polvo();
-  estadoSensor(temperatura,humedad,dustConc);
   
   Serial.print("Temperatura: ");
   Serial.print(temperatura);
@@ -115,15 +110,4 @@ void loop(void) {
   
   EnviarDatos(server,temperatura,humedad,dustConc);
   delay(10000); // Espero 10 seg antes de tomar otra muestra
-}
-
-void estadoSensor(double temperatura, double humedad, double polvo) {
-  if(temperatura > 27 && temperatura < 18)
-    digitalWrite(sensorPin,HIGH);
-  else if(humedad > 60 && humedad < 40)
-    digitalWrite(sensorPin,HIGH);
-  else if(polvo > 1000)
-    digitalWrite(sensorPin,HIGH);
-  else
-    digitalWrite(LED_p,LOW);
 }
