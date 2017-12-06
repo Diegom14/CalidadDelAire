@@ -60,7 +60,19 @@
 <HTML>
 <BODY>
 
+  <center>
+        <form action="graficoTemp.php" method="POST" id="formulario">
+            
+            <input type="submit" value="Ver gráfico de temperatura" name="entrar" />
+        </form>
 
+        <form action="graficoPolvo.php" method="POST" id="formulario">
+            
+            <input type="submit" value="Ver gráfico de la concentración de polvo" name="entrar" />
+        </form>
+
+        
+    </center>
 
 
 <meta charset="utf-8"> 

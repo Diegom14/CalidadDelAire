@@ -61,7 +61,19 @@
 <BODY>
 
 
+  <<center>
+        
 
+        <form action="graficoPolvo.php" method="POST" id="formulario">
+            
+            <input type="submit" value="Ver gráfico de la concentración de polvo" name="entrar" />
+        </form>
+
+        <form action="graficoHumedad.php" method="POST" id="formulario">
+            
+            <input type="submit" value="Ver gráfico de humedad" name="entrar" />
+        </form>
+    </center>
 
 <meta charset="utf-8"> 
 
